@@ -1,0 +1,15 @@
+{
+  "name": "duncan-plugins",
+  "owner": {
+    "name": "Duncan",
+    "url": "https://github.com/DuncanDHall"
+  },
+  "description": "Duncan's Claude Code plugins.",
+  "plugins": [
+    {
+      "name": "duncan",
+      "source": "./plugins/duncan",
+      "description": "Duncan's personal skills."
+    }
+  ]
+}

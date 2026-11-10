@@ -1,0 +1,10 @@
+{
+  "name": "duncan",
+  "version": "0.1.0",
+  "description": "Duncan's personal skills.",
+  "author": {
+    "name": "Duncan",
+    "url": "https://github.com/DuncanDHall"
+  },
+  "repository": "https://github.com/DuncanDHall/claude-plugins"
+}
