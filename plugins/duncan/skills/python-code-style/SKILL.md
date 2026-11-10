@@ -1,17 +1,25 @@
 ---
-name: python-private-functions
-description: Prefix private Python functions and methods with a single underscore. Use when writing, editing, or reviewing Python code.
+name: python-code-style
+description: Code style guidelines for Python. Use when writing, editing, or reviewing Python code.
 ---
 
-# Private Python functions
+# Python code style
+
+Follow every guideline below.
+
+- **Write.** Follow each guideline in new code.
+- **Edit.** Apply each guideline to the code that the change adds or changes. Leave code that the change does not touch, so the diff stays small.
+- **Review.** Report each place that breaks a guideline. Give the guideline, the name, and the file and line.
+
+## Prefix private functions and methods with `_`
 
 A module-level function is private when no code outside its module calls it.
 A method is private when no code outside its class and subclasses calls it.
 Give each private function or method a single leading underscore: `_parse_row`, not `parse_row`.
 
-## Find the callers
+### Find the callers
 
-Search the whole repository before you decide, because templates, config, and strings can refer to a function by name:
+Search the whole repository first, because templates, config, and strings can refer to a function by name:
 
 ```sh
 git grep -nw NAME
@@ -20,7 +28,7 @@ git grep -nw NAME
 Calls from tests do not make a function public.
 A test may call `_parse_row` directly.
 
-## Keep the public name
+### Keep the public name
 
 Do not add an underscore to a name that other code finds by name:
 
@@ -33,14 +41,12 @@ Do not add an underscore to a name that other code finds by name:
 A function nested inside another function is already local.
 It does not need an underscore.
 
-## Use one underscore, not two
+### Use one underscore, not two
 
 Two leading underscores make Python mangle the name to `_ClassName__name`.
 Mangling breaks access from subclasses and `mock.patch` targets.
 Use two underscores only to stop a subclass attribute from clashing with the parent's.
 
-## Apply it
+### Update every caller
 
-- **Write.** Give each new helper an underscore unless code outside its module or class calls it.
-- **Edit.** Add the underscore to a private function or method that the change adds or changes. Leave functions that the change does not touch, so the diff stays small. When you rename, update every caller, including `mock.patch("pkg.module.name")` strings.
-- **Review.** Report each private function or method that has no underscore. Give the name and where it is defined.
+To rename a function, update every caller, including `mock.patch("pkg.module.name")` strings.
