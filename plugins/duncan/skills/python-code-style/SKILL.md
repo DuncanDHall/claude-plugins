@@ -17,6 +17,11 @@ A module-level function is private when no code outside its module calls it.
 A method is private when no code outside its class and subclasses calls it.
 Give each private function or method a single leading underscore: `_parse_row`, not `parse_row`.
 
+The underscore marks an internal detail.
+Subclasses may call and override a `_method`.
+Python does not enforce it, so other code can still call `_parse_row`.
+Its only effect is that `from module import *` skips the name when the module has no `__all__`.
+
 ### Find the callers
 
 Search the whole repository first, because templates, config, and strings can refer to a function by name:
@@ -41,12 +46,20 @@ Do not add an underscore to a name that other code finds by name:
 A function nested inside another function is already local.
 It does not need an underscore.
 
-### Use one underscore, not two
-
-Two leading underscores make Python mangle the name to `_ClassName__name`.
-Mangling breaks access from subclasses and `mock.patch` targets.
-Use two underscores only to stop a subclass attribute from clashing with the parent's.
-
 ### Update every caller
 
 To rename a function, update every caller, including `mock.patch("pkg.module.name")` strings.
+
+## Use `__` only to stop subclass name clashes
+
+Inside a class body, Python mangles a name that starts with two underscores and does not end with two.
+In class `Parser`, `__check` becomes `_Parser__check`.
+A subclass that defines its own `__check` gets `_Child__check`, so it cannot override the parent's method by accident.
+
+Mangling is not access control.
+Code outside the class can still call `parser._Parser__check()`.
+
+- Use one underscore for a private method by default.
+- Use two underscores only when a subclass may define the same name and the parent must keep calling its own version, such as in a base class or mixin that other code extends.
+- Do not use two underscores for a module-level function. Python mangles names only inside a class body, and a call to `__helper()` from a method looks up `_ClassName__helper` and raises `NameError`.
+- To patch or read a mangled name from outside the class, use the mangled form, such as `mock.patch.object(Parser, "_Parser__check")`.
