@@ -35,8 +35,10 @@ A test may call `_parse_row` directly.
 
 ### Keep the public name
 
-Do not add an underscore to a name that other code finds by name:
+Do not add an underscore to these names:
 
+- Any function or method in `main.py`.
+- `main()`, and any other module-level function that the `if __name__ == "__main__":` block calls.
 - Dunder methods, such as `__init__` and `__eq__`.
 - An override of a public method from a parent class.
 - A framework hook, such as Django's `save` and `get_queryset`, unittest's `setUp`, or pytest's `test_*` functions and fixtures.
